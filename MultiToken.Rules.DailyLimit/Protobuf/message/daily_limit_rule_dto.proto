@@ -1,0 +1,15 @@
+/**
+ * CA contract.
+ */
+syntax = "proto3";
+
+package daily_limit_rule_dto;
+
+import "aelf/core.proto";
+option csharp_namespace = "MultiToken.Rules";
+
+message ConfigureInput {
+  aelf.Address manager = 1;
+  string symbol = 2;
+  uint64 limit = 3;
+}

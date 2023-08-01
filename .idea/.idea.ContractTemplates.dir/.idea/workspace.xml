@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0eec5b20-e2aa-4b8b-85c4-5e3407a59a6b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../AElf.Contract.Template.csproj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.template.config/template.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Portkey.Contracts.CA.csproj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Portkey.Contracts.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Portkey.ContractsConstants.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Portkey.ContractsHelpers.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Protobuf/base/acs1.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Protobuf/base/acs10.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Protobuf/base/acs11.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Protobuf/base/acs12.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Protobuf/base/acs3.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Protobuf/base/acs4.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Protobuf/base/acs5.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Protobuf/contract/bingo_game_contract.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Portkey.ContractsTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Protobuf/base/acs1.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Protobuf/base/acs10.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Protobuf/base/acs11.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Protobuf/base/acs12.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Protobuf/base/acs3.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Protobuf/base/acs4.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Protobuf/base/acs5.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Protobuf/message/authority_info.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Protobuf/stub/acs6.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Protobuf/stub/aedpos_contract.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Protobuf/stub/aedpos_contract_impl.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Protobuf/stub/basic_contract_zero.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Protobuf/stub/economic_contract.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Protobuf/stub/election_contract.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Protobuf/stub/profit_contract.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Protobuf/stub/token_converter_contract.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Protobuf/stub/treasury_contract.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/Protobuf/stub/vote_contract.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/.template.config/template.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/src/.idea/.idea.Portkey.Contracts.CA.dir/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/src/.idea/.idea.Portkey.Contracts.CA.dir/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/src/.idea/.idea.Portkey.Contracts.CA.dir/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/src/.idea/.idea.Portkey.Contracts.CA.dir/.idea/indexLayout.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/src/.idea/.idea.Portkey.Contracts.CA.dir/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/src/Portkey.Contracts.CA.csproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/src/Portkey.Contracts.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/src/Portkey.ContractsConstants.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/src/Portkey.ContractsHelpers.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/src/Portkey.ContractsState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Portkey.ContractsState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/src/ContractsReferences.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/ContractsReferences.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/src/Protobuf/contract/bingo_game_contract.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/src/Protobuf/message/authority_info.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/src/Protobuf/reference/aedpos_contract.proto" beforeDir="false" afterPath="$PROJECT_DIR$/src/Protobuf/reference/aedpos_contract.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/src/Protobuf/reference/token_contract.proto" beforeDir="false" afterPath="$PROJECT_DIR$/src/Protobuf/reference/token_contract.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/test/Portkey.Contracts.CA.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/test/Portkey.Contracts.CA.Tests.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/test/Protobuf/message/authority_info.proto" beforeDir="false" afterPath="$PROJECT_DIR$/src/Protobuf/message/authority_info.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/test/Protobuf/stub/bingo_game_contract.proto" beforeDir="false" afterPath="$PROJECT_DIR$/test/Protobuf/stub/bingo_game_contract.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/test/Protobuf/stub/token_contract.proto" beforeDir="false" afterPath="$PROJECT_DIR$/test/Protobuf/stub/token_contract.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/test/Tests.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BingoGame/test/_Setup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/test/_Setup.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c212dc075f3342ce8a991057788de34368600/0e/b0a22b99/SideChainContractDeploymentListProvider.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fb79e23e565e47b98afb281accf0b8817a3e00/97/5b146194/ContractTestBase`1.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fb79e23e565e47b98afb281accf0b8817a3e00/b6/c4a7f4a1/ContractTestModule`1.cs" root0="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2S6FbJPvbcO59lavwLqXsZW26EX" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0eec5b20-e2aa-4b8b-85c4-5e3407a59a6b" name="Changes" comment="" />
+      <created>1688459193757</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1688459193757</updated>
+      <workItem from="1688459199217" duration="865000" />
+      <workItem from="1688702375248" duration="724000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
+  <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+</project>

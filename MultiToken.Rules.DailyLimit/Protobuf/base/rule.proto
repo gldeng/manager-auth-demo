@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package rule;
+
+import public "aelf/options.proto";
+import public "google/protobuf/wrappers.proto";
+import public "google/protobuf/empty.proto";
+import "aelf/core.proto";
+
+option (aelf.identity) = "rule";
+option csharp_namespace = "MultiToken.Rules.DailyLimit";
+
+service Rule {
+    rpc Check(CallContext) returns (google.protobuf.BoolValue) {
+        option (aelf.is_view) = true;
+    };
+}
+
+message CallContext {
+    aelf.Hash ca_hash = 1;
+    aelf.Address contract_address = 2;
+    string method_name = 3;
+    bytes args = 4;
+    aelf.Address manager = 5;
+}

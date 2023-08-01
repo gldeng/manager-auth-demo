@@ -1,0 +1,31 @@
+/**
+ * CA contract.
+ */
+syntax = "proto3";
+
+package daily_limit_rule;
+
+import "google/protobuf/timestamp.proto";
+import "aelf/core.proto";
+import "aelf/options.proto";
+import "Protobuf/base/rule.proto";
+import "Protobuf/base/configurable.proto";
+
+option csharp_namespace = "MultiToken.Rules";
+
+service DailyLimitRule {
+  option (aelf.base) = "Protobuf/base/rule.proto";
+  option (aelf.base) = "Protobuf/base/configurable.proto";
+  option (aelf.csharp_state) = "MultiToken.Rules.DailyLimit.RuleState";
+}
+
+message ManagerQuotaTracker {
+  uint64 limit = 1;
+  repeated TransferRecord transfer_records = 2;
+  sint32 timezone = 3;
+}
+
+message TransferRecord {
+  google.protobuf.Timestamp timestamp = 1;
+  uint64 amount = 2;
+}
