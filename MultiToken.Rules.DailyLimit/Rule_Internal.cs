@@ -1,5 +1,6 @@
 using AElf.Contracts.MultiToken;
 using Google.Protobuf.WellKnownTypes;
+using Rule;
 
 namespace MultiToken.Rules.DailyLimit;
 

@@ -1,8 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using AElf.CSharp.Core.Extension;
+using DailyLimitRuleDto;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
+using Rule;
 
 namespace MultiToken.Rules.DailyLimit;
 

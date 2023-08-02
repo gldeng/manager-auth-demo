@@ -18,22 +18,36 @@ option csharp_namespace = "Portkey.Contracts.CA";
 
 service CAContract {
 
-  option (aelf.base) = "Protobuf/base/acs1.proto";
-  option (aelf.base) = "Protobuf/base/ca.proto";
-  option (aelf.csharp_state) = "Portkey.Contracts.CA.CAContractState";
+    option (aelf.base) = "Protobuf/base/acs1.proto";
+    option (aelf.base) = "Protobuf/base/ca.proto";
+    option (aelf.csharp_state) = "Portkey.Contracts.CA.CAContractState";
 
-  rpc UpdateManagers (UpdateManagersInput) returns (google.protobuf.Empty) {}
+    rpc UpdateManagers (UpdateManagersInput) returns (google.protobuf.Empty) {}
+    rpc SetRuleAddress (SetRuleAddressInput) returns (google.protobuf.Empty) {}
+    rpc SetPolicy (SetPolicyInput) returns (google.protobuf.Empty) {}
 }
 
 message UpdateManagersInput {
-  ManagerInfoList manager_info_list = 1;
+    aelf.Hash ca_hash = 1;
+    ManagerInfoList manager_info_list = 2;
+}
+
+message SetRuleAddressInput {
+    string rule_name = 1;
+    aelf.Address address = 2;
+}
+
+message SetPolicyInput {
+    aelf.Hash ca_hash = 1;
+    aelf.Address destination = 2;
+    string policy = 3;
 }
 
 message ManagerInfoList {
-  repeated ManagerInfo manager_infos = 2;
+    repeated ManagerInfo manager_infos = 2;
 }
 
 message ManagerInfo {
-  aelf.Address address = 1;
-  string extra_data = 2;
+    aelf.Address address = 1;
+    string extra_data = 2;
 }

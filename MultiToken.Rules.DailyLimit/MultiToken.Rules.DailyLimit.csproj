@@ -26,9 +26,5 @@
         </PackageReference>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="obj\" />
-    </ItemGroup>
-
 </Project>
     

@@ -11,9 +11,6 @@ public class CAContractState : ContractState
     public SingletonState<string> AllRules {get; set;}
     public MappedState<string, Address> RuleAddresses {get; set;}
 
-    // From -> Destination Contract -> Policy State
-    public MappedState<Hash, Address, byte[]> PolicyStates { get; set; }
-
     // From -> Destination Contract -> Policies
     public MappedState<Hash, Address, string> Policies { get; set; }
 }
