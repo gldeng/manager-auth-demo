@@ -2,5 +2,6 @@ namespace Deployer;
 
 enum ContractType
 {
-    Token
+    Token,
+    Parliament,
 }

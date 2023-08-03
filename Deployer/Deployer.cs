@@ -1,12 +1,16 @@
 using System.Security.Cryptography;
 using System.Text;
 using AElf.Client;
+using AElf.Contracts.Genesis;
+using AElf.Contracts.Parliament;
 using AElf.Cryptography;
 using AElf.Cryptography.ECDSA;
 using AElf.CSharp.Core;
+using AElf.Standards.ACS0;
+using AElf.Standards.ACS3;
 using AElf.Types;
 using Google.Protobuf;
-using Grpc.Net.Client;
+using Google.Protobuf.WellKnownTypes;
 using Token;
 
 namespace Deployer;
@@ -15,6 +19,8 @@ public class Deployer
 {
     private readonly AElfClient _client;
     private readonly ECKeyPair _keyPair;
+    private Address _genesisContractAddress;
+    private Address _parliamentContractAddress;
 
     public Deployer(string baseUrl, byte[] privateKey)
     {
@@ -25,22 +31,56 @@ public class Deployer
 
     internal async Task SetupAsync()
     {
-        var hasher = SHA256.Create();
-        var hash = hasher.ComputeHash(Encoding.UTF8.GetBytes("AElf.ContractNames.Token"));
-        var tokenAddr = await _client.GetContractAddressByNameAsync(new Hash
+        TokenContractStub =
+            await GetContractInstanceAsync<TokenContractContainer.TokenContractStub>(ContractType.Token);
+        ParliamentContractStub =
+            await GetContractInstanceAsync<ParliamentContractContainer.ParliamentContractStub>(ContractType.Parliament);
+        AuthorizationContractStub =
+            await GetContractInstanceAsync<AuthorizationContractContainer.AuthorizationContractStub>(ContractType
+                .Parliament);
+        _parliamentContractAddress = await GetAddressAsync(ContractType.Parliament);
+        var res = await _client.GetGenesisContractAddressAsync();
+        _genesisContractAddress = Address.FromBase58(res);
+        GenesisContractStub = new ACS0Container.ACS0Stub
         {
-            Value = ByteString.CopyFrom(hash)
-        });
-        TokenContractStub = new TokenContractContainer.TokenContractStub
-        {
-            __factory = GetMethodStubFactory(tokenAddr)
+            __factory = GetMethodStubFactory(_genesisContractAddress)
         };
+        BasicContractZeroStub = new BasicContractZeroContainer.BasicContractZeroStub
+        {
+            __factory = GetMethodStubFactory(_genesisContractAddress)
+        };
+        await MaybeAddGenesisAsProposerAsync();
     }
 
-    internal async Task<TContractStub> GetContractInstanceAsync<TContractStub>(ContractType contractType)
-        where TContractStub : ContractStubBase, new()
+    internal async Task<Address?> DeployAsync(string filename)
     {
-        async Task<Address> GetAddressAsync(string name)
+        var code = await File.ReadAllBytesAsync(filename);
+        await SetupAsync();
+        var result0 = await GenesisContractStub.DeployUserSmartContract.SendAsync(new ContractDeploymentInput
+        {
+            Category = 0,
+            Code = ByteString.CopyFrom(code),
+        });
+        var codeHash = result0.Output.CodeHash;
+        var remainingRetries = 10;
+        while (remainingRetries > 0)
+        {
+            var result = await GenesisContractStub.GetSmartContractRegistrationByCodeHash.CallAsync(codeHash);
+            if (result != null)
+            {
+                return result.ContractAddress;
+            }
+
+            remainingRetries--;
+            Thread.Sleep(500);
+        }
+
+        return null;
+    }
+
+    internal async Task<Address> GetAddressAsync(ContractType contractType)
+    {
+        async Task<Address> GetAsync(string name)
         {
             var hasher = SHA256.Create();
             var hash = hasher.ComputeHash(Encoding.UTF8.GetBytes(name));
@@ -50,11 +90,18 @@ public class Deployer
             });
         }
 
-        var address = contractType switch
+        return contractType switch
         {
-            ContractType.Token => await GetAddressAsync("AElf.ContractNames.Token"),
+            ContractType.Token => await GetAsync("AElf.ContractNames.Token"),
+            ContractType.Parliament => await GetAsync("AElf.ContractNames.Parliament"),
             _ => throw new ArgumentOutOfRangeException(nameof(contractType), contractType, null)
         };
+    }
+
+    internal async Task<TContractStub> GetContractInstanceAsync<TContractStub>(ContractType contractType)
+        where TContractStub : ContractStubBase, new()
+    {
+        var address = await GetAddressAsync(contractType);
 
         return GetContractInstance<TContractStub>(address);
     }
@@ -73,5 +120,43 @@ public class Deployer
         return new MethodStubFactory(_client, address, _keyPair);
     }
 
+    private async Task MaybeAddGenesisAsProposerAsync()
+    {
+        var whiteList = await ParliamentContractStub.GetProposerWhiteList.CallAsync(new Empty());
+        var alreadyInWhiteList = whiteList.Proposers.Contains(_genesisContractAddress);
+        if (alreadyInWhiteList)
+        {
+            return;
+        }
+
+        whiteList.Proposers.Add(_genesisContractAddress);
+
+        Timestamp GetExpiryTime()
+        {
+            var now = DateTime.UtcNow;
+            var oneHourLater = now.AddHours(1);
+            return Timestamp.FromDateTime(oneHourLater);
+        }
+
+        var organizationAddress = await ParliamentContractStub.GetDefaultOrganizationAddress.CallAsync(new Empty());
+
+        var result = await AuthorizationContractStub.CreateProposal.SendAsync(new CreateProposalInput
+        {
+            ContractMethodName = nameof(AuthorizationContractStub.ChangeOrganizationProposerWhiteList),
+            ToAddress = _parliamentContractAddress,
+            Params = whiteList.ToByteString(),
+            ExpiredTime = GetExpiryTime(),
+            OrganizationAddress = organizationAddress,
+        });
+
+        await AuthorizationContractStub.Approve.SendAsync(result.Output);
+        await AuthorizationContractStub.Release.SendAsync(result.Output);
+    }
+
     internal TokenContractContainer.TokenContractStub TokenContractStub { get; private set; }
+
+    internal ACS0Container.ACS0Stub GenesisContractStub { get; private set; }
+    internal BasicContractZeroContainer.BasicContractZeroStub BasicContractZeroStub { get; private set; }
+    internal ParliamentContractContainer.ParliamentContractStub ParliamentContractStub { get; private set; }
+    internal AuthorizationContractContainer.AuthorizationContractStub AuthorizationContractStub { get; private set; }
 }

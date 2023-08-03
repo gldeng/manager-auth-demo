@@ -26,7 +26,25 @@ public class MethodStubFactory : IMethodStubFactory
     public IMethodStub<TInput, TOutput> Create<TInput, TOutput>(Method<TInput, TOutput> method)
         where TInput : IMessage<TInput>, new() where TOutput : IMessage<TOutput>, new()
     {
-        async Task<IExecutionResult<TOutput>> SendAsync(TInput input)
+        async Task<TransactionResultDto?> WaitUntilMined(Hash transactionId, int retries = 10)
+        {
+            TransactionResultDto? result = null;
+            while (retries > 0)
+            {
+                result = await _client.GetTransactionResultAsync(transactionId.ToHex());
+                if (result?.Status == "MINED" || result?.Status == "NODEVALIDATIONFAILED")
+                {
+                    return result;
+                }
+
+                Thread.Sleep(500);
+                retries--;
+            }
+
+            return result;
+        }
+
+        async Task<IExecutionResult<TOutput?>> SendAsync(TInput input)
         {
             var refBlockInfo = await GetRefBlockInfoAsync();
             var transaction = GetTransaction(method, input, refBlockInfo);
@@ -34,21 +52,25 @@ public class MethodStubFactory : IMethodStubFactory
             {
                 RawTransaction = BitConverter.ToString(transaction.ToByteArray()).Replace("-", string.Empty)
             });
-            var result = await _client.GetTransactionResultAsync(txIdResult!.TransactionId);
+            var result = await WaitUntilMined(Hash.LoadFromHex(txIdResult.TransactionId));
             TryParse<TransactionResultStatus>(result!.Status, out var status);
-            return new ExecutionResult<TOutput>
+            return new ExecutionResult<TOutput?>
             {
                 Transaction = transaction, TransactionResult = new TransactionResult
                 {
-                    BlockHash = Hash.LoadFromHex(result!.BlockHash),
-                    BlockNumber = result.BlockNumber,
-                    Bloom = ByteString.CopyFrom(result.Bloom.DecodeHex()),
-                    Error = result.Error,
-                    ReturnValue = ByteString.CopyFrom(result.ReturnValue.DecodeHex()),
+                    BlockHash = result?.BlockHash != null ? Hash.LoadFromHex(result.BlockHash) : Hash.Empty,
+                    BlockNumber = result?.BlockNumber ?? 0,
+                    Bloom = result?.Bloom != null ? ByteString.FromBase64(result.Bloom) : ByteString.Empty,
+                    Error = result?.Error ?? "",
+                    ReturnValue = result?.ReturnValue != null
+                        ? ByteString.CopyFrom(result.ReturnValue.DecodeHex())
+                        : ByteString.Empty,
                     Status = status,
-                    TransactionId = Hash.LoadFromHex(result.TransactionId),
+                    TransactionId = result?.TransactionId != null ? Hash.LoadFromHex(result.TransactionId) : Hash.Empty,
                 },
-                Output = method.ResponseMarshaller.Deserializer(result.ReturnValue.DecodeHex())
+                Output = result?.ReturnValue != null
+                    ? method.ResponseMarshaller.Deserializer(result.ReturnValue.DecodeHex())
+                    : default
             };
         }
 
