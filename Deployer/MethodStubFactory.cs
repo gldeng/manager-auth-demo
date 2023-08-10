@@ -26,7 +26,7 @@ public class MethodStubFactory : IMethodStubFactory
     public IMethodStub<TInput, TOutput> Create<TInput, TOutput>(Method<TInput, TOutput> method)
         where TInput : IMessage<TInput>, new() where TOutput : IMessage<TOutput>, new()
     {
-        async Task<TransactionResultDto?> WaitUntilMined(Hash transactionId, int retries = 10)
+        async Task<TransactionResultDto?> WaitUntilMined(Hash transactionId, int retries = 100)
         {
             TransactionResultDto? result = null;
             while (retries > 0)
