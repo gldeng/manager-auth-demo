@@ -4,4 +4,5 @@ enum ContractType
 {
     Token,
     Parliament,
+    Consensus,
 }

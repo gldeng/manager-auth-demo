@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using AElf.Client;
+using AElf.Contracts.Consensus.AEDPoS;
 using AElf.Contracts.Genesis;
 using AElf.Contracts.Parliament;
 using AElf.Cryptography;
@@ -20,7 +21,7 @@ public class Deployer
     private readonly AElfClient _client;
     private readonly ECKeyPair _keyPair;
     private Address _genesisContractAddress;
-    private Address _parliamentContractAddress;
+    internal Address ParliamentContractAddress;
 
     public Deployer(string baseUrl, byte[] privateKey)
     {
@@ -38,7 +39,8 @@ public class Deployer
         AuthorizationContractStub =
             await GetContractInstanceAsync<AuthorizationContractContainer.AuthorizationContractStub>(ContractType
                 .Parliament);
-        _parliamentContractAddress = await GetAddressAsync(ContractType.Parliament);
+        AEDPoSContractStub = await GetContractInstanceAsync<AEDPoSContractContainer.AEDPoSContractStub>(ContractType.Consensus);
+        ParliamentContractAddress = await GetAddressAsync(ContractType.Parliament);
         var res = await _client.GetGenesisContractAddressAsync();
         _genesisContractAddress = Address.FromBase58(res);
         GenesisContractStub = new ACS0Container.ACS0Stub
@@ -62,11 +64,18 @@ public class Deployer
             Code = ByteString.CopyFrom(code),
         });
         var codeHash = result0.Output.CodeHash;
-        var remainingRetries = 10;
+
+        var proposalCreated = result0.TransactionResult.Logs.FirstOrDefault(l => l.Name == nameof(ProposalCreated));
+        return await CheckDeployedAddressAsync(codeHash);
+    }
+
+    internal async Task<Address?> CheckDeployedAddressAsync(Hash codeHash)
+    {
+        var remainingRetries = 1000;
         while (remainingRetries > 0)
         {
             var result = await GenesisContractStub.GetSmartContractRegistrationByCodeHash.CallAsync(codeHash);
-            if (result != null)
+            if (result?.ContractAddress != null)
             {
                 return result.ContractAddress;
             }
@@ -77,7 +86,7 @@ public class Deployer
 
         return null;
     }
-
+    
     internal async Task<Address> GetAddressAsync(ContractType contractType)
     {
         async Task<Address> GetAsync(string name)
@@ -94,6 +103,7 @@ public class Deployer
         {
             ContractType.Token => await GetAsync("AElf.ContractNames.Token"),
             ContractType.Parliament => await GetAsync("AElf.ContractNames.Parliament"),
+            ContractType.Consensus => await GetAsync("AElf.ContractNames.Consensus"),
             _ => throw new ArgumentOutOfRangeException(nameof(contractType), contractType, null)
         };
     }
@@ -143,7 +153,7 @@ public class Deployer
         var result = await AuthorizationContractStub.CreateProposal.SendAsync(new CreateProposalInput
         {
             ContractMethodName = nameof(AuthorizationContractStub.ChangeOrganizationProposerWhiteList),
-            ToAddress = _parliamentContractAddress,
+            ToAddress = ParliamentContractAddress,
             Params = whiteList.ToByteString(),
             ExpiredTime = GetExpiryTime(),
             OrganizationAddress = organizationAddress,
@@ -159,4 +169,5 @@ public class Deployer
     internal BasicContractZeroContainer.BasicContractZeroStub BasicContractZeroStub { get; private set; }
     internal ParliamentContractContainer.ParliamentContractStub ParliamentContractStub { get; private set; }
     internal AuthorizationContractContainer.AuthorizationContractStub AuthorizationContractStub { get; private set; }
+    internal AEDPoSContractContainer.AEDPoSContractStub AEDPoSContractStub { get; private set; }
 }
