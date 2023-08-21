@@ -39,7 +39,8 @@ public class Deployer
         AuthorizationContractStub =
             await GetContractInstanceAsync<AuthorizationContractContainer.AuthorizationContractStub>(ContractType
                 .Parliament);
-        AEDPoSContractStub = await GetContractInstanceAsync<AEDPoSContractContainer.AEDPoSContractStub>(ContractType.Consensus);
+        AEDPoSContractStub =
+            await GetContractInstanceAsync<AEDPoSContractContainer.AEDPoSContractStub>(ContractType.Consensus);
         ParliamentContractAddress = await GetAddressAsync(ContractType.Parliament);
         var res = await _client.GetGenesisContractAddressAsync();
         _genesisContractAddress = Address.FromBase58(res);
@@ -52,6 +53,19 @@ public class Deployer
             __factory = GetMethodStubFactory(_genesisContractAddress)
         };
         await MaybeAddGenesisAsProposerAsync();
+    }
+
+    internal async Task<T?> DeployAsync<T>(string filename) where T : ContractStubBase, new()
+    {
+        var addr = await DeployAsync(filename);
+        if (addr == null)
+        {
+            return null;
+        }
+        return new T
+        {
+            __factory = GetMethodStubFactory(addr)
+        };
     }
 
     internal async Task<Address?> DeployAsync(string filename)
@@ -86,7 +100,7 @@ public class Deployer
 
         return null;
     }
-    
+
     internal async Task<Address> GetAddressAsync(ContractType contractType)
     {
         async Task<Address> GetAsync(string name)

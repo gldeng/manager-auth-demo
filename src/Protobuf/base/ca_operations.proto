@@ -1,0 +1,41 @@
+/**
+ * CA contract.
+ */
+syntax = "proto3";
+
+package ca_operations;
+
+import "aelf/core.proto";
+import "aelf/options.proto";
+import "google/protobuf/empty.proto";
+
+service CaOperations {
+    rpc UpdateManagers (UpdateManagersInput) returns (google.protobuf.Empty) {}
+    rpc SetRuleAddress (SetRuleAddressInput) returns (google.protobuf.Empty) {}
+    rpc SetPolicy (SetPolicyInput) returns (google.protobuf.Empty) {}
+}
+
+message UpdateManagersInput {
+    aelf.Hash ca_hash = 1;
+    ManagerInfoList manager_info_list = 2;
+}
+
+message SetRuleAddressInput {
+    string rule_name = 1;
+    aelf.Address address = 2;
+}
+
+message SetPolicyInput {
+    aelf.Hash ca_hash = 1;
+    aelf.Address destination = 2;
+    string policy = 3;
+}
+
+message ManagerInfoList {
+    repeated ManagerInfo manager_infos = 2;
+}
+
+message ManagerInfo {
+    aelf.Address address = 1;
+    string extra_data = 2;
+}

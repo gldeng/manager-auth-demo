@@ -2,6 +2,7 @@ using AElf.Sdk.CSharp.State;
 using AElf.Standards.ACS1;
 using AElf.Types;
 using AElf.Contracts.A;
+using CaOperations;
 
 namespace Portkey.Contracts.CA;
 

@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portkey.Contracts", "src\Portkey.Contracts.csproj", "{6C5EDB5E-FE26-46A5-8295-28B8D190F8D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portkey.Contracts.CA", "src\Portkey.Contracts.CA.csproj", "{6C5EDB5E-FE26-46A5-8295-28B8D190F8D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiToken.Rules.DailyLimit", "MultiToken.Rules.DailyLimit\MultiToken.Rules.DailyLimit.csproj", "{869298BC-5DF1-4DF2-A353-ABB87F3DCC53}"
 EndProject
